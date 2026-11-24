@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using StarterAssets;
 
@@ -6,11 +5,11 @@ using StarterAssets;
 public class BallPhysicsController : MonoBehaviour
 {
     [Header("Movimentação")]
-    public float acceleration = 18f;
-    public float maxSpeed = 6f;
+    public float acceleration = 50f;
+    public float maxSpeed = 15f;
 
     [Header("Dash / Tacada")]
-    public float dashImpulse = 1.2f;
+    public float dashImpulse = 150f;
     public float dashCooldown = 1f;
 
     private Rigidbody rb;
@@ -59,24 +58,24 @@ public class BallPhysicsController : MonoBehaviour
 
         direction = Vector3.ClampMagnitude(direction, 1f);
 
-        // Movimentação normal
         Vector3 velocity = rb.linearVelocity;
-        Vector3 horizontalVelocity =
-            new Vector3(velocity.x, 0, velocity.z);
+        Vector3 horizontalVelocity = new Vector3(velocity.x, 0, velocity.z);
 
+        // Movimentação normal: aplica aceleração na direção desejada respeitando o limite direcional
         if (direction.sqrMagnitude > 0.01f)
         {
-            if (horizontalVelocity.magnitude < maxSpeed ||
-                Vector3.Dot(horizontalVelocity, direction) < 0)
+            Vector3 targetDir = direction.normalized;
+            float currentSpeedInDir = Vector3.Dot(horizontalVelocity, targetDir);
+
+            // Permite acelerar nas direções combinadas (ex: W + A/D) até maxSpeed
+            if (currentSpeedInDir < maxSpeed)
             {
-                rb.AddForce(
-                    direction * acceleration,
-                    ForceMode.Acceleration
-                );
+                float neededAccel = Mathf.Min(acceleration, (maxSpeed - currentSpeedInDir) / Time.fixedDeltaTime);
+                rb.AddForce(targetDir * neededAccel, ForceMode.Acceleration);
             }
         }
 
-        // Tacada
+        // Tacada / Dash (aplica impulso total sem clamp artificial)
         if (dashRequested)
         {
             dashRequested = false;

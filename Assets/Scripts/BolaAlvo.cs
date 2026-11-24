@@ -1,4 +1,4 @@
-
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -16,8 +16,13 @@ public class BolaAlvo : MonoBehaviour
     public float impulsoMinimo = 0.2f;
     public float multiplicadorImpulso = 0.1f;
 
+    [Header("Encaçapar e Respawn")]
+    [Tooltip("Tempo em segundos para a bola reaparecer no rack após ser encaçapada")]
+    public float tempoParaRespawn = 4f;
+
     private Rigidbody rb;
     private SphereCollider esfera;
+    private MeshRenderer meshRenderer;
 
     private Vector3 destino;
     private float raio;
@@ -25,11 +30,20 @@ public class BolaAlvo : MonoBehaviour
 
     private bool atingida = false;
     private bool pontuada = false;
+    private bool encacapada = false;
+
+    // Posição e rotação originais para o respawn
+    private Vector3 posicaoInicial;
+    private Quaternion rotacaoInicial;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         esfera = GetComponent<SphereCollider>();
+        meshRenderer = GetComponent<MeshRenderer>();
+
+        posicaoInicial = transform.position;
+        rotacaoInicial = transform.rotation;
 
         rb.isKinematic = true;
         rb.useGravity = false;
@@ -53,14 +67,70 @@ public class BolaAlvo : MonoBehaviour
             Mathf.Abs(escala.z)
         );
 
-        // O topo do Box Collider deve coincidir
-        // com a superfície da mesa.
         altura = areaSegura.bounds.max.y + raio;
-
-        // Corrige a posição inicial da bola
         rb.position = LimitarNaArea(rb.position);
 
         EscolherDestino();
+    }
+
+    void Update()
+    {
+        // Fallback: se a bola foi atingida e caiu da mesa (Y menor que a altura da mesa - 1.5)
+        if (atingida && !encacapada && areaSegura != null)
+        {
+            if (transform.position.y < altura - 1.5f)
+            {
+                if (TentarPontuar())
+                {
+                    ScoreManager.Instance?.AdicionarPontos(100);
+                }
+                Encapacar();
+            }
+        }
+    }
+
+    public void Encapacar(float tempo = -1f)
+    {
+        if (encacapada)
+            return;
+
+        encacapada = true;
+        float delay = tempo > 0f ? tempo : tempoParaRespawn;
+        StartCoroutine(RotinaRespawn(delay));
+    }
+
+    private IEnumerator RotinaRespawn(float delay)
+    {
+        // 1. Zera a física e esconde a bola
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        esfera.enabled = false;
+        if (meshRenderer != null) meshRenderer.enabled = false;
+
+        // 2. Aguarda o tempo de respawn
+        yield return new WaitForSeconds(delay);
+
+        // 3. Reposiciona na posição inicial no Rack
+        transform.position = posicaoInicial;
+        transform.rotation = rotacaoInicial;
+        rb.position = posicaoInicial;
+
+        // 4. Reseta as flags
+        atingida = false;
+        pontuada = false;
+        encacapada = false;
+
+        // 5. Reativa visual, colisor e reposiciona na mesa
+        if (meshRenderer != null) meshRenderer.enabled = true;
+        esfera.enabled = true;
+
+        if (areaSegura != null)
+        {
+            rb.position = LimitarNaArea(rb.position);
+            EscolherDestino();
+        }
     }
 
     float LimiteX()
@@ -95,7 +165,6 @@ public class BolaAlvo : MonoBehaviour
     {
         Transform area = areaSegura.transform;
 
-        // Converte a posição para o espaço local
         Vector3 local = area.InverseTransformPoint(posicao);
         Vector3 centro = areaSegura.center;
 
@@ -135,7 +204,7 @@ public class BolaAlvo : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (atingida || areaSegura == null)
+        if (atingida || encacapada || areaSegura == null)
             return;
 
         Vector3 atual = rb.position;
@@ -151,9 +220,7 @@ public class BolaAlvo : MonoBehaviour
             velocidade * Time.fixedDeltaTime
         );
 
-        // Impede a bola de ultrapassar a área
         proxima = LimitarNaArea(proxima);
-
         Vector3 movimento = proxima - atual;
 
         rb.MovePosition(proxima);
@@ -177,7 +244,7 @@ public class BolaAlvo : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (atingida)
+        if (atingida || encacapada)
             return;
 
         BallPhysicsController jogador =
