@@ -1,21 +1,65 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.SceneManagement;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 public class MainMenu : MonoBehaviour
 {
-    // MÈtodo para o bot„o "Jogar"
+    public GameObject creditsPanel;
+
+    private void Update()
+    {
+        if (creditsPanel != null && creditsPanel.activeSelf)
+        {
+            bool escapePressed = false;
+#if ENABLE_INPUT_SYSTEM
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                escapePressed = true;
+            }
+#endif
+#if ENABLE_LEGACY_INPUT_MANAGER
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                escapePressed = true;
+            }
+#endif
+            if (escapePressed)
+            {
+                CloseCredits();
+            }
+        }
+    }
+
+    // M√©todo para o bot√£o "Jogar"
     public void PlayGame()
     {
-        // Carrega a prÛxima cena na fila do Build Settings
-        // VocÍ tambÈm pode usar o nome exato da cena: SceneManager.LoadScene("Fase1");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    // MÈtodo para o bot„o "Sair"
+    // M√©todo para abrir o painel de Cr√©ditos
+    public void OpenCredits()
+    {
+        if (creditsPanel != null)
+        {
+            creditsPanel.SetActive(true);
+        }
+    }
+
+    // M√©todo para fechar o painel de Cr√©ditos
+    public void CloseCredits()
+    {
+        if (creditsPanel != null)
+        {
+            creditsPanel.SetActive(false);
+        }
+    }
+
+    // M√©todo para o bot√£o "Sair"
     public void QuitGame()
     {
-        Debug.Log("O jogo fechou!"); // O Unity Editor n„o fecha, ent„o usamos o Debug para testar
+        Debug.Log("O jogo fechou!");
         Application.Quit();
     }
 }
-
