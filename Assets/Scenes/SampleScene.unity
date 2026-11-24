@@ -448,9 +448,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 57993619712662602, guid: cda678f24bf82627498b02d48ac9606a, type: 3}
+      propertyPath: areaSegura
+      value: 
+      objectReference: {fileID: 47915361}
     - target: {fileID: 2717434065758492861, guid: cda678f24bf82627498b02d48ac9606a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -60.27242
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 2717434065758492861, guid: cda678f24bf82627498b02d48ac9606a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -590,7 +594,6 @@ GameObject:
   - component: {fileID: 168167615}
   - component: {fileID: 171086749}
   - component: {fileID: 170114425}
-  - component: {fileID: 181314039}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -797,7 +800,7 @@ Transform:
   m_GameObject: {fileID: 167908729}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 48.139244, y: -2.650589, z: -37.12251}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 40, y: 40, z: 40}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1915,27 +1918,6 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167909259}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 0.028575
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &181314039
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 167908729}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
