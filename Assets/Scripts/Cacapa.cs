@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Cacapa : MonoBehaviour
 {
@@ -7,7 +7,7 @@ public class Cacapa : MonoBehaviour
     public int pontosPorBola = 100;
 
     [Header("Efeitos")]
-    [Tooltip("Som opcional de encaçapamento")]
+    [Tooltip("Som opcional local de encaçapamento (fallback)")]
     public AudioSource somEncacapamento;
 
     private void OnTriggerEnter(Collider other)
@@ -18,6 +18,7 @@ public class Cacapa : MonoBehaviour
         {
             if (bola.TentarPontuar())
             {
+                AudioManager.Instance?.PlayPocket(1f);
                 ScoreManager.Instance?.AdicionarPontos(pontosPorBola);
             }
 
@@ -30,10 +31,13 @@ public class Cacapa : MonoBehaviour
             return;
         }
 
-        // 2. Caso seja a bola do jogador (bola branca)
+        // 2. Caso seja a bola do jogador (bola branca - falta)
         BallPhysicsController jogador = other.GetComponentInParent<BallPhysicsController>();
         if (jogador != null)
         {
+            AudioManager.Instance?.PlayFoul(1f);
+            ScoreManager.Instance?.ZerarComboPorFalta();
+
             Rigidbody rbJogador = jogador.GetComponent<Rigidbody>();
             if (rbJogador != null)
             {
@@ -42,7 +46,8 @@ public class Cacapa : MonoBehaviour
             }
 
             // Reposiciona o jogador suavemente de volta à mesa
-            BoxCollider mesaArea = Object.FindAnyObjectByType<BoxCollider>();
+            GameObject areaObj = GameObject.Find("AreaSeguraMesa");
+            BoxCollider mesaArea = areaObj != null ? areaObj.GetComponent<BoxCollider>() : Object.FindAnyObjectByType<BoxCollider>();
             if (mesaArea != null)
             {
                 jogador.transform.position = new Vector3(mesaArea.bounds.center.x, mesaArea.bounds.max.y + 1.2f, mesaArea.bounds.center.z);

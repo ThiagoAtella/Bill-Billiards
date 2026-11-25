@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -13,8 +13,8 @@ public class BolaAlvo : MonoBehaviour
     public float velocidade = 1.5f;
 
     [Header("Colisão com jogador")]
-    public float impulsoMinimo = 0.2f;
-    public float multiplicadorImpulso = 0.1f;
+    public float impulsoMinimo = 8f;
+    public float multiplicadorImpulso = 1.15f;
 
     [Header("Encaçapar e Respawn")]
     [Tooltip("Tempo em segundos para a bola reaparecer no rack após ser encaçapada")]
@@ -31,8 +31,8 @@ public class BolaAlvo : MonoBehaviour
     private bool atingida = false;
     private bool pontuada = false;
     private bool encacapada = false;
+    private int ultimoFrameImpacto = -1;
 
-    // Posição e rotação originais para o respawn
     private Vector3 posicaoInicial;
     private Quaternion rotacaoInicial;
 
@@ -75,13 +75,13 @@ public class BolaAlvo : MonoBehaviour
 
     void Update()
     {
-        // Fallback: se a bola foi atingida e caiu da mesa (Y menor que a altura da mesa - 1.5)
         if (atingida && !encacapada && areaSegura != null)
         {
             if (transform.position.y < altura - 1.5f)
             {
                 if (TentarPontuar())
                 {
+                    AudioManager.Instance?.PlayPocket(1f);
                     ScoreManager.Instance?.AdicionarPontos(100);
                 }
                 Encapacar();
@@ -101,7 +101,6 @@ public class BolaAlvo : MonoBehaviour
 
     private IEnumerator RotinaRespawn(float delay)
     {
-        // 1. Zera a física e esconde a bola
         rb.isKinematic = true;
         rb.useGravity = false;
         rb.linearVelocity = Vector3.zero;
@@ -109,20 +108,16 @@ public class BolaAlvo : MonoBehaviour
         esfera.enabled = false;
         if (meshRenderer != null) meshRenderer.enabled = false;
 
-        // 2. Aguarda o tempo de respawn
         yield return new WaitForSeconds(delay);
 
-        // 3. Reposiciona na posição inicial no Rack
         transform.position = posicaoInicial;
         transform.rotation = rotacaoInicial;
         rb.position = posicaoInicial;
 
-        // 4. Reseta as flags
         atingida = false;
         pontuada = false;
         encacapada = false;
 
-        // 5. Reativa visual, colisor e reposiciona na mesa
         if (meshRenderer != null) meshRenderer.enabled = true;
         esfera.enabled = true;
 
@@ -135,63 +130,34 @@ public class BolaAlvo : MonoBehaviour
 
     float LimiteX()
     {
-        float escala = Mathf.Max(
-            0.0001f,
-            Mathf.Abs(areaSegura.transform.lossyScale.x)
-        );
-
-        return Mathf.Max(
-            0f,
-            areaSegura.size.x / 2f
-            - (raio + margemExtra) / escala
-        );
+        float escala = Mathf.Max(0.0001f, Mathf.Abs(areaSegura.transform.lossyScale.x));
+        return Mathf.Max(0f, areaSegura.size.x / 2f - (raio + margemExtra) / escala);
     }
 
     float LimiteZ()
     {
-        float escala = Mathf.Max(
-            0.0001f,
-            Mathf.Abs(areaSegura.transform.lossyScale.z)
-        );
-
-        return Mathf.Max(
-            0f,
-            areaSegura.size.z / 2f
-            - (raio + margemExtra) / escala
-        );
+        float escala = Mathf.Max(0.0001f, Mathf.Abs(areaSegura.transform.lossyScale.z));
+        return Mathf.Max(0f, areaSegura.size.z / 2f - (raio + margemExtra) / escala);
     }
 
     Vector3 LimitarNaArea(Vector3 posicao)
     {
         Transform area = areaSegura.transform;
-
         Vector3 local = area.InverseTransformPoint(posicao);
         Vector3 centro = areaSegura.center;
 
-        local.x = Mathf.Clamp(
-            local.x,
-            centro.x - LimiteX(),
-            centro.x + LimiteX()
-        );
-
-        local.z = Mathf.Clamp(
-            local.z,
-            centro.z - LimiteZ(),
-            centro.z + LimiteZ()
-        );
-
+        local.x = Mathf.Clamp(local.x, centro.x - LimiteX(), centro.x + LimiteX());
+        local.z = Mathf.Clamp(local.z, centro.z - LimiteZ(), centro.z + LimiteZ());
         local.y = centro.y;
 
         Vector3 resultado = area.TransformPoint(local);
         resultado.y = altura;
-
         return resultado;
     }
 
     void EscolherDestino()
     {
         Vector3 centro = areaSegura.center;
-
         Vector3 local = centro + new Vector3(
             Random.Range(-LimiteX(), LimiteX()),
             0f,
@@ -227,72 +193,81 @@ public class BolaAlvo : MonoBehaviour
 
         if (movimento.sqrMagnitude > 0.000001f)
         {
-            Vector3 eixo = Vector3.Cross(
-                Vector3.up,
-                movimento.normalized
-            );
+            Vector3 eixo = Vector3.Cross(Vector3.up, movimento.normalized);
+            float angulo = movimento.magnitude / raio * Mathf.Rad2Deg;
+            rb.MoveRotation(Quaternion.AngleAxis(angulo, eixo) * rb.rotation);
+        }
+    }
 
-            float angulo = movimento.magnitude /
-                           raio * Mathf.Rad2Deg;
+    public void AplicarImpactoDoJogador(BallPhysicsController jogador, Vector3 velocidadePreColisao, bool emDash)
+    {
+        if (encacapada || ultimoFrameImpacto == Time.frameCount)
+            return;
 
-            rb.MoveRotation(
-                Quaternion.AngleAxis(angulo, eixo)
-                * rb.rotation
-            );
+        ultimoFrameImpacto = Time.frameCount;
+
+        bool eraKinematic = rb.isKinematic;
+        atingida = true;
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+        Rigidbody corpoJogador = jogador.GetComponent<Rigidbody>();
+
+        Vector3 direcao = rb.position - jogador.transform.position;
+        direcao.y = 0f;
+
+        Vector3 velJogador = velocidadePreColisao;
+        if ( corpoJogador != null && corpoJogador.linearVelocity.sqrMagnitude > velJogador.sqrMagnitude )
+        {
+            velJogador = corpoJogador.linearVelocity;
+        }
+        velJogador.y = 0f;
+
+        float velocidadeMagnitude = velJogador.magnitude;
+
+        if (direcao.sqrMagnitude < 0.0001f)
+            direcao = velJogador.sqrMagnitude > 0.0001f ? velJogador.normalized : Vector3.forward;
+        else
+            direcao.Normalize();
+
+        float impulsoBase = Mathf.Max(impulsoMinimo, velocidadeMagnitude * multiplicadorImpulso);
+
+        if (emDash)
+        {
+            impulsoBase = impulsoBase * jogador.dashHitMultiplier + jogador.dashBonusImpactImpulse;
+        }
+
+        // Quando a bola alvo estava kinematic no frame da colisão, aplica a velocidade total transferida
+        // e devolve parte do follow-through para a bola branca não parar seca
+        if (eraKinematic)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(direcao * impulsoBase, ForceMode.VelocityChange);
+
+            if (corpoJogador != null && velJogador.sqrMagnitude > 0.1f)
+            {
+                corpoJogador.linearVelocity = new Vector3(velJogador.x * 0.45f, corpoJogador.linearVelocity.y, velJogador.z * 0.45f);
+            }
+        }
+        else if (emDash)
+        {
+            // Em bolas já dinâmicas, adiciona o bônus explosivo do Dash
+            float bonusExtra = velocidadeMagnitude * (jogador.dashHitMultiplier - 1f) + jogador.dashBonusImpactImpulse;
+            rb.AddForce(direcao * bonusExtra, ForceMode.VelocityChange);
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (atingida || encacapada)
+        if (encacapada)
             return;
 
-        BallPhysicsController jogador =
-            collision.collider.GetComponentInParent
-            <BallPhysicsController>();
-
-        if (jogador == null)
-            return;
-
-        atingida = true;
-
-        rb.isKinematic = false;
-        rb.useGravity = true;
-        rb.collisionDetectionMode =
-            CollisionDetectionMode.ContinuousDynamic;
-
-        Rigidbody corpoJogador =
-            jogador.GetComponent<Rigidbody>();
-
-        Vector3 direcao =
-            rb.position - jogador.transform.position;
-
-        direcao.y = 0f;
-
-        float velocidadeJogador = 0f;
-
-        if (corpoJogador != null)
+        BallPhysicsController jogador = collision.collider.GetComponentInParent<BallPhysicsController>();
+        if (jogador != null)
         {
-            Vector3 v = corpoJogador.linearVelocity;
-            v.y = 0f;
-            velocidadeJogador = v.magnitude;
-
-            if (direcao.sqrMagnitude < 0.0001f)
-                direcao = v;
+            AplicarImpactoDoJogador(jogador, jogador.LastPreCollisionVelocity, jogador.isDashing);
         }
-
-        if (direcao.sqrMagnitude < 0.0001f)
-            direcao = Vector3.forward;
-
-        float impulso = Mathf.Max(
-            impulsoMinimo,
-            velocidadeJogador * multiplicadorImpulso
-        );
-
-        rb.AddForce(
-            direcao.normalized * impulso,
-            ForceMode.Impulse
-        );
     }
 
     public bool TentarPontuar()
