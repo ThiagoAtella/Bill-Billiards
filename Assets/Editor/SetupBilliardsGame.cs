@@ -1,13 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using TMPro;
 
-[InitializeOnLoad]
+// [InitializeOnLoad]
 public static class SetupBilliardsGame
 {
-    [InitializeOnLoadMethod]
+    // [InitializeOnLoadMethod]
     [MenuItem("Tools/Configurar Pontuação e Caçapas")]
     public static void ConfigurarCena()
     {
