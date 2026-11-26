@@ -184,7 +184,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86726455}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -509,6 +509,7 @@ GameObject:
   - component: {fileID: 181316865}
   - component: {fileID: 181316867}
   - component: {fileID: 181316866}
+  - component: {fileID: 181316868}
   m_Layer: 0
   m_Name: 10
   m_TagString: Untagged
@@ -530,6 +531,7 @@ GameObject:
   - component: {fileID: 181275591}
   - component: {fileID: 181275593}
   - component: {fileID: 181275592}
+  - component: {fileID: 181275594}
   m_Layer: 0
   m_Name: 5
   m_TagString: Untagged
@@ -551,6 +553,7 @@ GameObject:
   - component: {fileID: 181361573}
   - component: {fileID: 181361575}
   - component: {fileID: 181361574}
+  - component: {fileID: 181361576}
   m_Layer: 0
   m_Name: 3
   m_TagString: Untagged
@@ -588,6 +591,7 @@ GameObject:
   - component: {fileID: 181314039}
   - component: {fileID: 181314041}
   - component: {fileID: 181314040}
+  - component: {fileID: 181314042}
   m_Layer: 0
   m_Name: 2
   m_TagString: Untagged
@@ -609,6 +613,7 @@ GameObject:
   - component: {fileID: 181288797}
   - component: {fileID: 181288799}
   - component: {fileID: 181288798}
+  - component: {fileID: 181288800}
   m_Layer: 0
   m_Name: 8
   m_TagString: Untagged
@@ -630,6 +635,7 @@ GameObject:
   - component: {fileID: 181329737}
   - component: {fileID: 181329739}
   - component: {fileID: 181329738}
+  - component: {fileID: 181329740}
   m_Layer: 0
   m_Name: 15
   m_TagString: Untagged
@@ -651,6 +657,7 @@ GameObject:
   - component: {fileID: 181275973}
   - component: {fileID: 181275975}
   - component: {fileID: 181275974}
+  - component: {fileID: 181275976}
   m_Layer: 0
   m_Name: 6
   m_TagString: Untagged
@@ -672,6 +679,7 @@ GameObject:
   - component: {fileID: 181344387}
   - component: {fileID: 181344389}
   - component: {fileID: 181344388}
+  - component: {fileID: 181344390}
   m_Layer: 0
   m_Name: 9
   m_TagString: Untagged
@@ -693,6 +701,7 @@ GameObject:
   - component: {fileID: 181337959}
   - component: {fileID: 181337961}
   - component: {fileID: 181337960}
+  - component: {fileID: 181337962}
   m_Layer: 0
   m_Name: 13
   m_TagString: Untagged
@@ -714,6 +723,7 @@ GameObject:
   - component: {fileID: 181277053}
   - component: {fileID: 181277055}
   - component: {fileID: 181277054}
+  - component: {fileID: 181277056}
   m_Layer: 0
   m_Name: 12
   m_TagString: Untagged
@@ -735,6 +745,7 @@ GameObject:
   - component: {fileID: 181351179}
   - component: {fileID: 181351181}
   - component: {fileID: 181351180}
+  - component: {fileID: 181351182}
   m_Layer: 0
   m_Name: 7
   m_TagString: Untagged
@@ -756,6 +767,7 @@ GameObject:
   - component: {fileID: 181316373}
   - component: {fileID: 181316375}
   - component: {fileID: 181316374}
+  - component: {fileID: 181316376}
   m_Layer: 0
   m_Name: 4
   m_TagString: Untagged
@@ -777,6 +789,7 @@ GameObject:
   - component: {fileID: 181274185}
   - component: {fileID: 181274187}
   - component: {fileID: 181274186}
+  - component: {fileID: 181274188}
   m_Layer: 0
   m_Name: 11
   m_TagString: Untagged
@@ -798,6 +811,7 @@ GameObject:
   - component: {fileID: 181364049}
   - component: {fileID: 181364051}
   - component: {fileID: 181364050}
+  - component: {fileID: 181364052}
   m_Layer: 0
   m_Name: 14
   m_TagString: Untagged
@@ -2001,7 +2015,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167959469}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2028,11 +2042,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181274187
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2042,7 +2067,7 @@ Rigidbody:
   m_GameObject: {fileID: 167959469}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2057,9 +2082,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181274188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167959469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181275591
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2067,7 +2107,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167889497}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2094,11 +2134,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181275593
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2108,7 +2159,7 @@ Rigidbody:
   m_GameObject: {fileID: 167889497}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2123,9 +2174,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181275594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167889497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181275973
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2133,7 +2199,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167926295}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2160,11 +2226,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0
-  velocidade: 20
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181275975
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2174,7 +2251,7 @@ Rigidbody:
   m_GameObject: {fileID: 167926295}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2189,9 +2266,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181275976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167926295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181277053
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2199,7 +2291,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167948167}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2226,11 +2318,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181277055
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2240,7 +2343,7 @@ Rigidbody:
   m_GameObject: {fileID: 167948167}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2255,9 +2358,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181277056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167948167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181288797
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2265,7 +2383,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167909259}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2292,11 +2410,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181288799
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2306,7 +2435,7 @@ Rigidbody:
   m_GameObject: {fileID: 167909259}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2321,9 +2450,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181288800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167909259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181314039
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2331,7 +2475,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167908729}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2358,11 +2502,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181314041
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2372,7 +2527,7 @@ Rigidbody:
   m_GameObject: {fileID: 167908729}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2387,9 +2542,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181314042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167908729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181316373
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2397,7 +2567,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167950997}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2424,11 +2594,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181316375
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2438,7 +2619,7 @@ Rigidbody:
   m_GameObject: {fileID: 167950997}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2453,9 +2634,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181316376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167950997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181316865
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2463,7 +2659,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167876677}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2490,11 +2686,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181316867
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2504,7 +2711,7 @@ Rigidbody:
   m_GameObject: {fileID: 167876677}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2519,9 +2726,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181316868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167876677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181329737
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2529,7 +2751,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167911505}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2556,11 +2778,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181329739
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2570,7 +2803,7 @@ Rigidbody:
   m_GameObject: {fileID: 167911505}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2585,9 +2818,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181329740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167911505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181337959
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2595,7 +2843,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167944255}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2622,11 +2870,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181337961
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2636,7 +2895,7 @@ Rigidbody:
   m_GameObject: {fileID: 167944255}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2651,9 +2910,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181337962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167944255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181344387
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2661,7 +2935,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167932973}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2688,11 +2962,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181344389
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2702,7 +2987,7 @@ Rigidbody:
   m_GameObject: {fileID: 167932973}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2717,9 +3002,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181344390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167932973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181351179
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2727,7 +3027,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167950899}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2754,11 +3054,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181351181
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2768,7 +3079,7 @@ Rigidbody:
   m_GameObject: {fileID: 167950899}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2783,9 +3094,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181351182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167950899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181361573
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2793,7 +3119,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167907877}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2820,11 +3146,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181361575
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2834,7 +3171,7 @@ Rigidbody:
   m_GameObject: {fileID: 167907877}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2849,9 +3186,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181361576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167907877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!135 &181364049
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2859,7 +3211,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 167993651}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -2886,11 +3238,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &181364051
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2900,7 +3263,7 @@ Rigidbody:
   m_GameObject: {fileID: 167993651}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -2915,9 +3278,77 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &181364052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 167993651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
+--- !u!1 &187364918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 187364919}
+  - component: {fileID: 187364920}
+  m_Layer: 2
+  m_Name: parede 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &187364919
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187364918}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 15.75, z: -113.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115567303}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &187364920
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187364918}
+  m_Material: {fileID: 13400000, guid: 62a4de33a39acc94fafa751b24745ad2, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 139, y: 30.5, z: 4}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &248942199 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -1599826595754709761, guid: 86cdae0ced427d240aee935aad718cf2, type: 3}
@@ -2930,7 +3361,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 248942199}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3064,6 +3495,55 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 8944336655422409496, guid: f6d148d888ffbf54b9afe9936dfaec1f, type: 3}
   m_PrefabInstance: {fileID: 284048143}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &312999994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 312999996}
+  - component: {fileID: 312999995}
+  m_Layer: 0
+  m_Name: Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &312999995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312999994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.Volume
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 3b2dd773e1adce0428fc2d6f563f3e02, type: 2}
+--- !u!4 &312999996
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 312999994}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1814.4722, y: 0, z: 1543.4689}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &402710796
 GameObject:
   m_ObjectHideFlags: 0
@@ -3129,7 +3609,13 @@ Transform:
   m_LocalPosition: {x: -7.339405, y: 69.3, z: 32.905792}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 631281121}
+  - {fileID: 1893675039}
+  - {fileID: 563343993}
+  - {fileID: 1353934080}
+  - {fileID: 2091196901}
+  - {fileID: 2080748320}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &406633023 stripped
@@ -3144,7 +3630,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 406633023}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -3163,6 +3649,203 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 86cdae0ced427d240aee935aad718cf2, type: 3}
   m_PrefabInstance: {fileID: 1731619656}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &553695717
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 553695718}
+  - component: {fileID: 553695719}
+  m_Layer: 2
+  m_Name: parede 4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &553695718
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553695717}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -67.5, y: 15.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115567303}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &553695719
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 553695717}
+  m_Material: {fileID: 13400000, guid: 62a4de33a39acc94fafa751b24745ad2, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4, y: 30.5, z: 231}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &563343992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 563343993}
+  - component: {fileID: 563343995}
+  - component: {fileID: 563343994}
+  m_Layer: 2
+  m_Name: PocketAssist_MeioEsquerdo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &563343993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563343992}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -53.890594, y: 2.5499954, z: 2.0942078}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 402710799}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &563343994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563343992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd8f889b7a265e40b0953f30ba82d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PocketAssist
+  pullForce: 35
+  downwardForce: 25
+  horizontalDamping: 0.92
+  enableCueBallAvoidance: 1
+  cueBallRepelForce: 18
+  innerFoulRadius: 2.5
+--- !u!135 &563343995
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563343992}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 6.8
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &631281120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 631281121}
+  - component: {fileID: 631281123}
+  - component: {fileID: 631281122}
+  m_Layer: 2
+  m_Name: PocketAssist_CantoSuperiorEsquerdo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &631281121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631281120}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -50.930595, y: 2.5499954, z: 103.20421}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 402710799}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &631281122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631281120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd8f889b7a265e40b0953f30ba82d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PocketAssist
+  pullForce: 35
+  downwardForce: 25
+  horizontalDamping: 0.92
+  enableCueBallAvoidance: 1
+  cueBallRepelForce: 18
+  innerFoulRadius: 3
+--- !u!135 &631281123
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 631281120}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 8
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &750651609
 GameObject:
   m_ObjectHideFlags: 0
@@ -3486,6 +4169,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &855494753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 855494754}
+  - component: {fileID: 855494755}
+  m_Layer: 2
+  m_Name: parede 3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &855494754
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855494753}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 67.5, y: 15.75, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115567303}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &855494755
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 855494753}
+  m_Material: {fileID: 13400000, guid: 62a4de33a39acc94fafa751b24745ad2, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4, y: 30.5, z: 231}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &967400530
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3500,7 +4236,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1293029876712600392, guid: 2553cec8fdb3eb643bbe9f2ec880c472, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 76.1
+      value: 72.9
       objectReference: {fileID: 0}
     - target: {fileID: 1293029876712600392, guid: 2553cec8fdb3eb643bbe9f2ec880c472, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3619,7 +4355,7 @@ GameObject:
   - component: {fileID: 977326504}
   - component: {fileID: 977326503}
   m_Layer: 0
-  m_Name: CanvasHUD
+  m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3973,6 +4709,131 @@ RectTransform:
   m_AnchoredPosition: {x: 50, y: -134}
   m_SizeDelta: {x: 550, y: 80}
   m_Pivot: {x: 0, y: 1}
+--- !u!1 &1287138861
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1287138862}
+  - component: {fileID: 1287138863}
+  m_Layer: 2
+  m_Name: parede 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1287138862
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287138861}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 15.75, z: 113.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115567303}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1287138863
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1287138861}
+  m_Material: {fileID: 13400000, guid: 62a4de33a39acc94fafa751b24745ad2, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 139, y: 30.5, z: 4}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1353934079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1353934080}
+  - component: {fileID: 1353934082}
+  - component: {fileID: 1353934081}
+  m_Layer: 2
+  m_Name: PocketAssist_MeioDireito
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1353934080
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353934079}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 56.569405, y: 2.5499954, z: 2.0942078}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 402710799}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1353934081
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353934079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd8f889b7a265e40b0953f30ba82d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PocketAssist
+  pullForce: 35
+  downwardForce: 25
+  horizontalDamping: 0.92
+  enableCueBallAvoidance: 1
+  cueBallRepelForce: 18
+  innerFoulRadius: 2.5
+--- !u!135 &1353934082
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353934079}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 6.8
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1606486991
 GameObject:
   m_ObjectHideFlags: 0
@@ -4138,7 +4999,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1626933079}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -4510,6 +5371,78 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!1 &1893675038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1893675039}
+  - component: {fileID: 1893675041}
+  - component: {fileID: 1893675040}
+  m_Layer: 2
+  m_Name: PocketAssist_CantoSuperiorDireito
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1893675039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893675038}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 53.609406, y: 2.5499954, z: 103.20421}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 402710799}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1893675040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893675038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd8f889b7a265e40b0953f30ba82d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PocketAssist
+  pullForce: 35
+  downwardForce: 25
+  horizontalDamping: 0.92
+  enableCueBallAvoidance: 1
+  cueBallRepelForce: 18
+  innerFoulRadius: 3
+--- !u!135 &1893675041
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1893675038}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 8
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1902353910 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1925873226565265906, guid: 2553cec8fdb3eb643bbe9f2ec880c472, type: 3}
@@ -4527,19 +5460,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5f5f3e00dd27d0b9134a672d257821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallPhysicsController
-  acceleration: 65
-  maxSpeed: 24
+  acceleration: 50
+  maxSpeed: 15
+  jumpForce: 34
+  upwardGravityMultiplier: 14
+  fallGravityMultiplier: 18
+  jumpCooldown: 0.25
+  groundCheckExtraDistance: 0.4
+  groundCheckMask:
+    serializedVersion: 2
+    m_Bits: 51
+  isGrounded: 0
   dashSpeed: 75
   dashImpulse: 75
   dashDuration: 0.35
   dashCooldown: 1.1
   dashHitMultiplier: 1.45
   dashBonusImpactImpulse: 25
+  recoilDamping: 0.55
   isDashing: 0
   normalLinearDamping: 0.08
-  brakeLinearDamping: 7.5
-  driftCorneringMultiplier: 1.85
-  isBraking: 0
+  driftTurnSpeed: 5
+  driftSpeedRetention: 0.95
+  driftDamping: 0.5
+  smoothBrakeDeceleration: 22
+  isDrifting: 0
   dashTrail: {fileID: 1902353918}
   trailSpeedThreshold: 32
 --- !u!54 &1902353913
@@ -4550,7 +5495,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1902353910}
   serializedVersion: 5
-  m_Mass: 1
+  m_Mass: 2
   m_LinearDamping: 0.08
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -4568,7 +5513,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!135 &1902353917
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4727,7 +5672,7 @@ MonoBehaviour:
   maxAimDistance: 95
   collisionMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 51
   targetLineLength: 24
   wallReflectionLength: 22
   useMagneticAimAssist: 1
@@ -4753,6 +5698,59 @@ MonoBehaviour:
   minImpactSpeed: 0.5
   maxImpactSpeed: 15
   collisionCooldown: 0.05
+--- !u!1 &1932958834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1932958835}
+  - component: {fileID: 1932958836}
+  m_Layer: 2
+  m_Name: teto
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1932958835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932958834}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 30, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115567303}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1932958836
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1932958834}
+  m_Material: {fileID: 13400000, guid: 9011ba5511dc85749ace1a9e8089d4fd, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 139, y: 2, z: 231}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1935346266 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3726431512471821962, guid: 659783ac570fa6166bd9a37f126e8149, type: 3}
@@ -4858,6 +5856,186 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9d89f1aab57e5e4791992c5f6f547b8, type: 3}
+--- !u!1 &2080748319
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2080748320}
+  - component: {fileID: 2080748322}
+  - component: {fileID: 2080748321}
+  m_Layer: 2
+  m_Name: PocketAssist_CantoInferiorDireito
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2080748320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080748319}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 53.609406, y: 2.5499954, z: -99.01579}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 402710799}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2080748321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080748319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd8f889b7a265e40b0953f30ba82d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PocketAssist
+  pullForce: 35
+  downwardForce: 25
+  horizontalDamping: 0.92
+  enableCueBallAvoidance: 1
+  cueBallRepelForce: 18
+  innerFoulRadius: 3
+--- !u!135 &2080748322
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080748319}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 8
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2091196900
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2091196901}
+  - component: {fileID: 2091196903}
+  - component: {fileID: 2091196902}
+  m_Layer: 2
+  m_Name: PocketAssist_CantoInferiorEsquerdo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2091196901
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091196900}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -50.930595, y: 2.5499954, z: -99.01579}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 402710799}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2091196902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091196900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcd8f889b7a265e40b0953f30ba82d99, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PocketAssist
+  pullForce: 35
+  downwardForce: 25
+  horizontalDamping: 0.92
+  enableCueBallAvoidance: 1
+  cueBallRepelForce: 18
+  innerFoulRadius: 3
+--- !u!135 &2091196903
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2091196900}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 8
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2115567302
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2115567303}
+  m_Layer: 2
+  m_Name: limites
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2115567303
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2115567302}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6, y: 71.652, z: 35}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1287138862}
+  - {fileID: 187364919}
+  - {fileID: 855494754}
+  - {fileID: 553695718}
+  - {fileID: 1932958835}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1272609296416434847
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5054,7 +6232,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8067468095532439286}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5082,6 +6260,7 @@ GameObject:
   - component: {fileID: 6285537169460140565}
   - component: {fileID: 8067468095532439288}
   - component: {fileID: 8067468095532439287}
+  - component: {fileID: 8067468095532439289}
   m_Layer: 0
   m_Name: 1
   m_TagString: Untagged
@@ -5102,11 +6281,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 47915361}
-  margemExtra: 0.2
-  velocidade: 1.5
-  impulsoMinimo: 8
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 1.15
   tempoParaRespawn: 4
+  velocidade: 14
 --- !u!54 &8067468095532439288
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5116,7 +6306,7 @@ Rigidbody:
   m_GameObject: {fileID: 8067468095532439286}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -5131,9 +6321,24 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
+--- !u!114 &8067468095532439289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8067468095532439286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f80f80562c61834cbf6d1afdb61414a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BallSound
+  minImpactSpeed: 0.5
+  maxImpactSpeed: 15
+  collisionCooldown: 0.05
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5152,3 +6357,5 @@ SceneRoots:
   - {fileID: 977326502}
   - {fileID: 132541268}
   - {fileID: 6048238527742511857}
+  - {fileID: 312999996}
+  - {fileID: 2115567303}

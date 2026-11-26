@@ -42,7 +42,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5911073646938700244}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -65,7 +65,7 @@ Rigidbody:
   m_GameObject: {fileID: 5911073646938700244}
   serializedVersion: 5
   m_Mass: 1
-  m_LinearDamping: 0
+  m_LinearDamping: 0.05
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -80,9 +80,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &57993619712662602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,10 +96,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BolaAlvo
   areaSegura: {fileID: 0}
-  margemExtra: 0
-  velocidade: 20
-  impulsoMinimo: 1
+  margemExtra: 10
+  targetSpeed: 14
+  maxWanderSpeed: 16.5
+  acceleration: 35
+  turnSpeed: 6.5
+  burstIntervalMin: 2.5
+  burstIntervalMax: 4.5
+  burstForce: 3.5
+  hitStunDuration: 4.5
+  minSpeedToKeepStun: 1.5
+  maxHitStunSafetyDuration: 7
+  chainStunSpeedThreshold: 8
+  impulsoMinimo: 18
   multiplicadorImpulso: 2
+  tempoParaRespawn: 4
+  velocidade: 14
 --- !u!1 &6957208695741262041
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +210,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6957208695741262041}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: a757c899cfd76404288877eeda3abd06, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
