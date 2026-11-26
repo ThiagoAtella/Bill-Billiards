@@ -21,7 +21,7 @@ public class AimTrajectory : MonoBehaviour
     [SerializeField] public float maxAimDistance = 95f;
 
     [Tooltip("Camadas de colisão para bolas e tabelas da mesa")]
-    [SerializeField] public LayerMask collisionMask = ~0;
+    [SerializeField] public LayerMask collisionMask = ~(1 << 2);
 
     [Tooltip("Comprimento da linha de previsão que sai da bola alvo atingida")]
     [SerializeField] public float targetLineLength = 24f;
@@ -96,6 +96,10 @@ public class AimTrajectory : MonoBehaviour
 
     private void LateUpdate()
     {
+        // Sempre atualiza a direção assistida pelo AimTrajectory (mesmo com as linhas ocultas),
+        // para que o Dash saia sempre na direção do AimTrajectory e nunca no WASD
+        AssistedAimDirection = GetAssistedAimDirection();
+
         bool rightMouseHeld = ReadAimInput();
         IsAiming = rightMouseHeld;
 
@@ -106,7 +110,6 @@ public class AimTrajectory : MonoBehaviour
             if (wasAimingLastFrame)
             {
                 SetLinesVisible(false);
-                CurrentLockedTarget = null;
             }
             wasAimingLastFrame = false;
             return;
@@ -114,6 +117,14 @@ public class AimTrajectory : MonoBehaviour
 
         wasAimingLastFrame = true;
         UpdateTrajectory();
+    }
+
+    public Vector3 GetAssistedAimDirection()
+    {
+        Vector3 origin = transform.position;
+        Vector3 baseDir = ComputeBaseCameraDirection();
+        AssistedAimDirection = ComputeMagneticAimDirection(origin, baseDir);
+        return AssistedAimDirection;
     }
 
     private bool ReadAimInput()

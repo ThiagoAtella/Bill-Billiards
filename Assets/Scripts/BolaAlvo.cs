@@ -5,28 +5,70 @@ using UnityEngine;
 [RequireComponent(typeof(SphereCollider))]
 public class BolaAlvo : MonoBehaviour
 {
-    [Header("Área segura")]
+    [Header("Área Segura da Mesa")]
     public BoxCollider areaSegura;
-    public float margemExtra = 0.2f;
+    [Tooltip("Margem de segurança das bordas e caçapas para os destinos sorteados")]
+    [SerializeField] public float margemExtra = 10f;
 
-    [Header("Movimentação")]
-    public float velocidade = 1.5f;
+    [Header("Movimentação Dinâmica e Objetiva (Por Destinos na Mesa)")]
+    [Tooltip("Velocidade de cruzeiro objetiva pela mesa (calibrada para a escala de 188 unidades da mesa)")]
+    [SerializeField] public float targetSpeed = 14f;
 
-    [Header("Colisão com jogador")]
-    public float impulsoMinimo = 8f;
-    public float multiplicadorImpulso = 1.15f;
+    [Tooltip("Velocidade horizontal máxima permitida enquanto a bola se move sozinha")]
+    [SerializeField] public float maxWanderSpeed = 16.5f;
 
-    [Header("Encaçapar e Respawn")]
-    [Tooltip("Tempo em segundos para a bola reaparecer no rack após ser encaçapada")]
-    public float tempoParaRespawn = 4f;
+    [Tooltip("Aceleração aplicada no FixedUpdate para manter targetSpeed com resposta imediata")]
+    [SerializeField] public float acceleration = 35f;
+
+    [Tooltip("Velocidade de alinhamento (radianos/s) da bola em direção ao ponto de destino atual")]
+    [SerializeField] public float turnSpeed = 6.5f;
+
+    [Tooltip("Intervalo mínimo (segundos) para trocar de destino / dar um pequeno impulso")]
+    [SerializeField] public float burstIntervalMin = 2.5f;
+
+    [Tooltip("Intervalo máximo (segundos) para trocar de destino / dar um pequeno impulso")]
+    [SerializeField] public float burstIntervalMax = 4.5f;
+
+    [Tooltip("Impulso extra ao iniciar um novo trajeto objetivo")]
+    [SerializeField] public float burstForce = 3.5f;
+
+    [Header("Hit Stun (Pausa na IA em Tacadas e Carambolas)")]
+    [Tooltip("Duração base do Hit Stun em segundos após impacto (4.5f)")]
+    [SerializeField] public float hitStunDuration = 4.5f;
+
+    [Tooltip("Velocidade mínima acima da qual o Hit Stun continua ativo enquanto a bola desliza (1.5f)")]
+    [SerializeField] public float minSpeedToKeepStun = 1.5f;
+
+    [Tooltip("Limite máximo de segurança em segundos para o Hit Stun nunca travar infinito (7.0f)")]
+    [SerializeField] public float maxHitStunSafetyDuration = 7.0f;
+
+    [Tooltip("Velocidade mínima que uma bola em Hit Stun precisa ter para passar Hit Stun a outra bola")]
+    [SerializeField] public float chainStunSpeedThreshold = 8.0f;
+
+    [Header("Colisão com Jogador e Respawn")]
+    [SerializeField] public float impulsoMinimo = 18f;
+    [SerializeField] public float multiplicadorImpulso = 1.15f;
+
+    [Tooltip("Tempo em segundos para a bola reaparecer após ser encaçapada")]
+    [SerializeField] public float tempoParaRespawn = 4f;
+
+    [HideInInspector] public float velocidade = 14f;
 
     private Rigidbody rb;
     private SphereCollider esfera;
     private MeshRenderer meshRenderer;
 
     private Vector3 destino;
+    private Vector3 direcaoObjetivo;
+    private float nextDestinationChangeTime;
+
+    private float stunTimer;
+    private float stunSafetyTimer;
+    private float stunElapsed;
+
     private float raio;
-    private float altura;
+    private float alturaMesa;
+    private Vector3 lastFixedHorizontalVelocity;
 
     private bool atingida = false;
     private bool pontuada = false;
@@ -35,8 +77,15 @@ public class BolaAlvo : MonoBehaviour
 
     private Vector3 posicaoInicial;
     private Quaternion rotacaoInicial;
+    private static PocketAssist[] cachedPockets;
 
-    void Awake()
+    // Propriedade pública consultada pelo PocketAssist
+    public bool IsHitStunned => stunTimer > 0f;
+    public bool IsStunned => stunTimer > 0f;
+    public bool FoiAtingida => atingida;
+    public Vector3 LastPreCollisionVelocity => lastFixedHorizontalVelocity;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         esfera = GetComponent<SphereCollider>();
@@ -45,39 +94,123 @@ public class BolaAlvo : MonoBehaviour
         posicaoInicial = transform.position;
         rotacaoInicial = transform.rotation;
 
-        rb.isKinematic = true;
-        rb.useGravity = false;
-        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        ConfigureDynamicRigidbody();
     }
 
-    void Start()
+    private void ConfigureDynamicRigidbody()
+    {
+        if (rb == null)
+            return;
+
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        rb.mass = 1f;
+        rb.linearDamping = 0.05f;
+        rb.angularDamping = 0.05f;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+    }
+
+    private void Start()
     {
         if (areaSegura == null)
         {
-            Debug.LogError("Área segura não configurada!");
-            enabled = false;
-            return;
+            GameObject areaObj = GameObject.Find("AreaSeguraMesa");
+            if (areaObj != null)
+                areaSegura = areaObj.GetComponent<BoxCollider>();
+        }
+
+        if (cachedPockets == null || cachedPockets.Length == 0)
+        {
+            cachedPockets = Object.FindObjectsByType<PocketAssist>(FindObjectsSortMode.None);
         }
 
         Vector3 escala = transform.lossyScale;
+        raio = esfera != null
+            ? esfera.radius * Mathf.Max(Mathf.Abs(escala.x), Mathf.Abs(escala.y), Mathf.Abs(escala.z))
+            : 1.2f;
 
-        raio = esfera.radius * Mathf.Max(
-            Mathf.Abs(escala.x),
-            Mathf.Abs(escala.y),
-            Mathf.Abs(escala.z)
-        );
+        alturaMesa = areaSegura != null ? areaSegura.bounds.max.y + raio : transform.position.y;
 
-        altura = areaSegura.bounds.max.y + raio;
-        rb.position = LimitarNaArea(rb.position);
-
-        EscolherDestino();
+        IniciarMovimentoObjetivo();
     }
 
-    void Update()
+    private void IniciarMovimentoObjetivo()
     {
-        if (atingida && !encacapada && areaSegura != null)
+        stunTimer = 0f;
+        stunSafetyTimer = 0f;
+        stunElapsed = 0f;
+
+        EscolherNovoDestino(true);
+
+        float initialSpeed = Mathf.Min(maxWanderSpeed, targetSpeed * Random.Range(0.95f, 1.15f));
+        rb.linearVelocity = direcaoObjetivo * initialSpeed;
+        lastFixedHorizontalVelocity = rb.linearVelocity;
+    }
+
+    private float LimiteX()
+    {
+        if (areaSegura == null) return 35f;
+        float escala = Mathf.Max(0.0001f, Mathf.Abs(areaSegura.transform.lossyScale.x));
+        return Mathf.Max(5f, areaSegura.size.x * 0.5f - (raio + margemExtra) / escala);
+    }
+
+    private float LimiteZ()
+    {
+        if (areaSegura == null) return 75f;
+        float escala = Mathf.Max(0.0001f, Mathf.Abs(areaSegura.transform.lossyScale.z));
+        return Mathf.Max(5f, areaSegura.size.z * 0.5f - (raio + margemExtra) / escala);
+    }
+
+    public void EscolherNovoDestino(bool aplicarBurst = false)
+    {
+        if (areaSegura == null)
         {
-            if (transform.position.y < altura - 1.5f)
+            float ang = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+            direcaoObjetivo = new Vector3(Mathf.Cos(ang), 0f, Mathf.Sin(ang)).normalized;
+            destino = transform.position + direcaoObjetivo * 45f;
+            return;
+        }
+
+        Vector3 centro = areaSegura.center;
+        float limX = LimiteX();
+        float limZ = LimiteZ();
+
+        // Sorteia um ponto de destino objetivo bem distante da posição atual para a bola cruzar a mesa com propósito
+        Vector3 candidato = transform.position;
+        for (int tentativa = 0; tentativa < 8; tentativa++)
+        {
+            Vector3 local = centro + new Vector3(
+                Random.Range(-limX, limX),
+                0f,
+                Random.Range(-limZ, limZ)
+            );
+            candidato = areaSegura.transform.TransformPoint(local);
+            candidato.y = alturaMesa;
+
+            if (Vector3.Distance(new Vector3(transform.position.x, alturaMesa, transform.position.z), candidato) >= 35f)
+                break;
+        }
+
+        destino = candidato;
+        Vector3 toDest = new Vector3(destino.x - transform.position.x, 0f, destino.z - transform.position.z);
+        direcaoObjetivo = toDest.sqrMagnitude > 0.01f ? toDest.normalized : Vector3.forward;
+
+        float minB = Mathf.Max(1.5f, burstIntervalMin);
+        float maxB = Mathf.Max(minB, burstIntervalMax);
+        nextDestinationChangeTime = Time.time + Random.Range(minB, maxB);
+
+        if (aplicarBurst && rb != null && !rb.isKinematic && burstForce > 0.01f)
+        {
+            rb.AddForce(direcaoObjetivo * burstForce, ForceMode.VelocityChange);
+        }
+    }
+
+    private void Update()
+    {
+        if (!encacapada && areaSegura != null)
+        {
+            if (transform.position.y < alturaMesa - 1.5f)
             {
                 if (TentarPontuar())
                 {
@@ -86,6 +219,272 @@ public class BolaAlvo : MonoBehaviour
                 }
                 Encapacar();
             }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (encacapada || rb == null || rb.isKinematic)
+            return;
+
+        // Trava vertical para manter as bolas alvo coladas no feltro
+        if (rb.linearVelocity.y > 0f)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        }
+
+        Vector3 vel = rb.linearVelocity;
+        Vector3 horizontalVel = new Vector3(vel.x, 0f, vel.z);
+        float currentSpeed = horizontalVel.magnitude;
+        lastFixedHorizontalVelocity = horizontalVel;
+
+        // 1. Pausa na IA durante o Hit Stun:
+        if (stunTimer > 0f)
+        {
+            stunTimer -= Time.fixedDeltaTime;
+            stunSafetyTimer -= Time.fixedDeltaTime;
+            stunElapsed += Time.fixedDeltaTime;
+
+            if (stunSafetyTimer > 0f && currentSpeed > minSpeedToKeepStun)
+            {
+                stunTimer = Mathf.Max(stunTimer, 0.25f);
+            }
+            else if (stunElapsed >= 0.5f && currentSpeed <= minSpeedToKeepStun)
+            {
+                stunTimer = 0f;
+            }
+
+            if (stunTimer <= 0f || stunSafetyTimer <= 0f)
+            {
+                stunTimer = 0f;
+                stunSafetyTimer = 0f;
+                stunElapsed = 0f;
+                if (!encacapada && transform.position.y >= alturaMesa - 0.8f)
+                {
+                    atingida = false;
+                }
+                EscolherNovoDestino(true);
+            }
+            return;
+        }
+
+        // 2. Verifica se chegou perto do destino atual ou se o tempo daquele trajeto expirou
+        Vector3 posPlana = new Vector3(rb.position.x, 0f, rb.position.z);
+        Vector3 destPlano = new Vector3(destino.x, 0f, destino.z);
+        Vector3 paraDestino = destPlano - posPlana;
+        float distDestino = paraDestino.magnitude;
+
+        if (distDestino < 4.5f || Time.time >= nextDestinationChangeTime)
+        {
+            EscolherNovoDestino(true);
+            paraDestino = new Vector3(destino.x - rb.position.x, 0f, destino.z - rb.position.z);
+            distDestino = paraDestino.magnitude;
+        }
+
+        if (distDestino > 0.01f)
+        {
+            direcaoObjetivo = paraDestino / distDestino;
+        }
+
+        // 3. Auto-Preservação: se chegar perto de uma caçapa ou sair da margem segura, troca imediatamente o destino para o lado oposto / centro
+        if (VerificarAutoPreservacao(out Vector3 safeDirToCenter))
+        {
+            direcaoObjetivo = safeDirToCenter;
+            if (areaSegura != null)
+            {
+                destino = areaSegura.bounds.center + safeDirToCenter * 25f;
+                destino.y = alturaMesa;
+            }
+        }
+
+        // 4. Alinha o vetor de velocidade de forma objetiva com a direção do destino e garante velocidade viva (targetSpeed)
+        if (currentSpeed > 0.2f)
+        {
+            Vector3 alignedDir = Vector3.RotateTowards(
+                horizontalVel.normalized,
+                direcaoObjetivo,
+                turnSpeed * Time.fixedDeltaTime,
+                0f
+            ).normalized;
+
+            horizontalVel = alignedDir * currentSpeed;
+        }
+        else
+        {
+            horizontalVel = direcaoObjetivo * Mathf.Min(targetSpeed, acceleration * Time.fixedDeltaTime * 3f);
+        }
+
+        // Acelera decididamente até targetSpeed
+        if (horizontalVel.magnitude < targetSpeed)
+        {
+            float newMag = Mathf.MoveTowards(horizontalVel.magnitude, targetSpeed, acceleration * Time.fixedDeltaTime);
+            horizontalVel = (horizontalVel.sqrMagnitude > 0.001f ? horizontalVel.normalized : direcaoObjetivo) * newMag;
+        }
+        else if (horizontalVel.magnitude > maxWanderSpeed)
+        {
+            horizontalVel = horizontalVel.normalized * maxWanderSpeed;
+        }
+
+        rb.linearVelocity = new Vector3(horizontalVel.x, vel.y, horizontalVel.z);
+        lastFixedHorizontalVelocity = horizontalVel;
+    }
+
+    private bool VerificarAutoPreservacao(out Vector3 dirToCenter)
+    {
+        dirToCenter = Vector3.forward;
+        if (areaSegura == null)
+            return false;
+
+        Bounds b = areaSegura.bounds;
+        Vector3 pos = rb.position;
+        Vector3 center = b.center;
+
+        Vector3 toCenter = new Vector3(center.x - pos.x, 0f, center.z - pos.z);
+        if (toCenter.sqrMagnitude > 0.001f)
+            dirToCenter = toCenter.normalized;
+
+        if (cachedPockets != null)
+        {
+            for (int i = 0; i < cachedPockets.Length; i++)
+            {
+                PocketAssist pa = cachedPockets[i];
+                if (pa == null)
+                    continue;
+
+                Vector3 pPos = pa.transform.position;
+                Vector3 fromPocket = new Vector3(pos.x - pPos.x, 0f, pos.z - pPos.z);
+                float distToPocket = fromPocket.magnitude;
+                float safePocketRadius = pa.GetWorldSuctionRadius() * 1.4f + 2f;
+
+                if (distToPocket < safePocketRadius)
+                {
+                    if (fromPocket.sqrMagnitude > 0.001f)
+                    {
+                        dirToCenter = Vector3.Slerp(fromPocket.normalized, dirToCenter, 0.55f).normalized;
+                    }
+                    return true;
+                }
+            }
+        }
+
+        float safeMaxX = Mathf.Max(5f, b.extents.x - (raio + margemExtra));
+        float safeMaxZ = Mathf.Max(5f, b.extents.z - (raio + margemExtra));
+
+        float dx = Mathf.Abs(pos.x - center.x);
+        float dz = Mathf.Abs(pos.z - center.z);
+
+        return (dx > safeMaxX || dz > safeMaxZ);
+    }
+
+    public void AtivarHitStun(float customDuration = -1f)
+    {
+        atingida = true;
+        float dur = customDuration > 0f ? customDuration : hitStunDuration;
+        stunTimer = Mathf.Max(stunTimer, dur);
+        stunSafetyTimer = Mathf.Max(stunSafetyTimer, maxHitStunSafetyDuration);
+        stunElapsed = 0f;
+    }
+
+    public void AplicarImpactoDoJogador(BallPhysicsController jogador, Vector3 velocidadePreColisao, bool emDash)
+    {
+        if (encacapada || ultimoFrameImpacto == Time.frameCount)
+            return;
+
+        ultimoFrameImpacto = Time.frameCount;
+        AtivarHitStun(hitStunDuration);
+
+        if (rb.linearVelocity.y > 0f)
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+        if (jogador != null)
+        {
+            Vector3 direcao = rb.position - jogador.transform.position;
+            direcao.y = 0f;
+            if (direcao.sqrMagnitude < 0.0001f)
+                direcao = velocidadePreColisao.sqrMagnitude > 0.0001f ? velocidadePreColisao.normalized : Vector3.forward;
+            else
+                direcao.Normalize();
+
+            float velAoLongoDoChoque = Mathf.Max(impulsoMinimo, Vector3.Dot(velocidadePreColisao, direcao) * multiplicadorImpulso);
+            if (emDash)
+            {
+                velAoLongoDoChoque = velAoLongoDoChoque * jogador.dashHitMultiplier + jogador.dashBonusImpactImpulse;
+            }
+
+            Vector3 currentHoriz = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+            float currentAlong = Vector3.Dot(currentHoriz, direcao);
+            if (currentAlong < velAoLongoDoChoque)
+            {
+                rb.AddForce(direcao * (velAoLongoDoChoque - currentAlong), ForceMode.VelocityChange);
+            }
+            lastFixedHorizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (encacapada || collision == null || collision.collider == null)
+            return;
+
+        if (rb.linearVelocity.y > 0f)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        }
+
+        // 1. Colisão direta com a Bola Branca (Jogador)
+        BallPhysicsController jogador = collision.collider.GetComponentInParent<BallPhysicsController>();
+        if (jogador != null)
+        {
+            AplicarImpactoDoJogador(jogador, jogador.LastPreCollisionVelocity, jogador.isDashing);
+            return;
+        }
+
+        // 2. Colisão com outra Bola Alvo
+        BolaAlvo outraBola = collision.collider.GetComponentInParent<BolaAlvo>();
+        if (outraBola != null)
+        {
+            if (!IsHitStunned && outraBola.IsHitStunned)
+            {
+                float hitterSpeed = Mathf.Max(outraBola.LastPreCollisionVelocity.magnitude, collision.relativeVelocity.magnitude);
+                if (hitterSpeed >= chainStunSpeedThreshold)
+                {
+                    AtivarHitStun(hitStunDuration);
+                }
+            }
+
+            // Se não estiver em Hit Stun, escolhe um novo destino na direção para onde ricocheteou
+            if (!IsHitStunned)
+            {
+                Vector3 postHoriz = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+                if (postHoriz.sqrMagnitude > 0.2f && areaSegura != null)
+                {
+                    direcaoObjetivo = postHoriz.normalized;
+                    destino = rb.position + direcaoObjetivo * 45f;
+                }
+                else
+                {
+                    EscolherNovoDestino(false);
+                }
+            }
+            return;
+        }
+
+        // 3. Colisão com tabela/parede da mesa
+        if (!IsHitStunned && collision.contactCount > 0)
+        {
+            ContactPoint cp = collision.GetContact(0);
+            if (Mathf.Abs(cp.normal.y) < 0.55f)
+            {
+                EscolherNovoDestino(false);
+            }
+        }
+    }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        if (rb != null && rb.linearVelocity.y > 0f)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
         }
     }
 
@@ -101,11 +500,14 @@ public class BolaAlvo : MonoBehaviour
 
     private IEnumerator RotinaRespawn(float delay)
     {
-        rb.isKinematic = true;
-        rb.useGravity = false;
+        stunTimer = 0f;
+        stunSafetyTimer = 0f;
+        stunElapsed = 0f;
         rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        esfera.enabled = false;
+        rb.isKinematic = true;
+        rb.useGravity = false;
+        if (esfera != null) esfera.enabled = false;
         if (meshRenderer != null) meshRenderer.enabled = false;
 
         yield return new WaitForSeconds(delay);
@@ -119,155 +521,10 @@ public class BolaAlvo : MonoBehaviour
         encacapada = false;
 
         if (meshRenderer != null) meshRenderer.enabled = true;
-        esfera.enabled = true;
+        if (esfera != null) esfera.enabled = true;
 
-        if (areaSegura != null)
-        {
-            rb.position = LimitarNaArea(rb.position);
-            EscolherDestino();
-        }
-    }
-
-    float LimiteX()
-    {
-        float escala = Mathf.Max(0.0001f, Mathf.Abs(areaSegura.transform.lossyScale.x));
-        return Mathf.Max(0f, areaSegura.size.x / 2f - (raio + margemExtra) / escala);
-    }
-
-    float LimiteZ()
-    {
-        float escala = Mathf.Max(0.0001f, Mathf.Abs(areaSegura.transform.lossyScale.z));
-        return Mathf.Max(0f, areaSegura.size.z / 2f - (raio + margemExtra) / escala);
-    }
-
-    Vector3 LimitarNaArea(Vector3 posicao)
-    {
-        Transform area = areaSegura.transform;
-        Vector3 local = area.InverseTransformPoint(posicao);
-        Vector3 centro = areaSegura.center;
-
-        local.x = Mathf.Clamp(local.x, centro.x - LimiteX(), centro.x + LimiteX());
-        local.z = Mathf.Clamp(local.z, centro.z - LimiteZ(), centro.z + LimiteZ());
-        local.y = centro.y;
-
-        Vector3 resultado = area.TransformPoint(local);
-        resultado.y = altura;
-        return resultado;
-    }
-
-    void EscolherDestino()
-    {
-        Vector3 centro = areaSegura.center;
-        Vector3 local = centro + new Vector3(
-            Random.Range(-LimiteX(), LimiteX()),
-            0f,
-            Random.Range(-LimiteZ(), LimiteZ())
-        );
-
-        destino = areaSegura.transform.TransformPoint(local);
-        destino.y = altura;
-    }
-
-    void FixedUpdate()
-    {
-        if (atingida || encacapada || areaSegura == null)
-            return;
-
-        Vector3 atual = rb.position;
-
-        if (Vector3.Distance(atual, destino) < 0.1f)
-        {
-            EscolherDestino();
-        }
-
-        Vector3 proxima = Vector3.MoveTowards(
-            atual,
-            destino,
-            velocidade * Time.fixedDeltaTime
-        );
-
-        proxima = LimitarNaArea(proxima);
-        Vector3 movimento = proxima - atual;
-
-        rb.MovePosition(proxima);
-
-        if (movimento.sqrMagnitude > 0.000001f)
-        {
-            Vector3 eixo = Vector3.Cross(Vector3.up, movimento.normalized);
-            float angulo = movimento.magnitude / raio * Mathf.Rad2Deg;
-            rb.MoveRotation(Quaternion.AngleAxis(angulo, eixo) * rb.rotation);
-        }
-    }
-
-    public void AplicarImpactoDoJogador(BallPhysicsController jogador, Vector3 velocidadePreColisao, bool emDash)
-    {
-        if (encacapada || ultimoFrameImpacto == Time.frameCount)
-            return;
-
-        ultimoFrameImpacto = Time.frameCount;
-
-        bool eraKinematic = rb.isKinematic;
-        atingida = true;
-        rb.isKinematic = false;
-        rb.useGravity = true;
-        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-
-        Rigidbody corpoJogador = jogador.GetComponent<Rigidbody>();
-
-        Vector3 direcao = rb.position - jogador.transform.position;
-        direcao.y = 0f;
-
-        Vector3 velJogador = velocidadePreColisao;
-        if ( corpoJogador != null && corpoJogador.linearVelocity.sqrMagnitude > velJogador.sqrMagnitude )
-        {
-            velJogador = corpoJogador.linearVelocity;
-        }
-        velJogador.y = 0f;
-
-        float velocidadeMagnitude = velJogador.magnitude;
-
-        if (direcao.sqrMagnitude < 0.0001f)
-            direcao = velJogador.sqrMagnitude > 0.0001f ? velJogador.normalized : Vector3.forward;
-        else
-            direcao.Normalize();
-
-        float impulsoBase = Mathf.Max(impulsoMinimo, velocidadeMagnitude * multiplicadorImpulso);
-
-        if (emDash)
-        {
-            impulsoBase = impulsoBase * jogador.dashHitMultiplier + jogador.dashBonusImpactImpulse;
-        }
-
-        // Quando a bola alvo estava kinematic no frame da colisão, aplica a velocidade total transferida
-        // e devolve parte do follow-through para a bola branca não parar seca
-        if (eraKinematic)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.AddForce(direcao * impulsoBase, ForceMode.VelocityChange);
-
-            if (corpoJogador != null && velJogador.sqrMagnitude > 0.1f)
-            {
-                corpoJogador.linearVelocity = new Vector3(velJogador.x * 0.45f, corpoJogador.linearVelocity.y, velJogador.z * 0.45f);
-            }
-        }
-        else if (emDash)
-        {
-            // Em bolas já dinâmicas, adiciona o bônus explosivo do Dash
-            float bonusExtra = velocidadeMagnitude * (jogador.dashHitMultiplier - 1f) + jogador.dashBonusImpactImpulse;
-            rb.AddForce(direcao * bonusExtra, ForceMode.VelocityChange);
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (encacapada)
-            return;
-
-        BallPhysicsController jogador = collision.collider.GetComponentInParent<BallPhysicsController>();
-        if (jogador != null)
-        {
-            AplicarImpactoDoJogador(jogador, jogador.LastPreCollisionVelocity, jogador.isDashing);
-        }
+        ConfigureDynamicRigidbody();
+        IniciarMovimentoObjetivo();
     }
 
     public bool TentarPontuar()
